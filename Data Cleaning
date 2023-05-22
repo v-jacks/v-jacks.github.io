@@ -1,0 +1,375 @@
+library(tidyverse)
+library(tidyr)
+library(questionr)
+
+
+setwd("C:/Users/Vii/Desktop/Projects/FOCCEE/Quant Analysis/JSZC Paper")
+CData<-read.csv("Centiment_Cleaned_Data_1.21.csv")
+
+View(CData)
+
+#Adding subject ids
+CData$ResponseId <- seq.int(nrow(CData))
+
+#viewing variable names
+names(CData)
+
+#recoding Q1.3
+CData %>% count(Q1.3)
+CData$Q1.3 <- factor(CData$Q1.3,
+                     levels = c(1,2,3,4,5), 
+                     labels = c("Recieved Warnings","Could not come back",
+                                "Told to find another program",
+                                "Impossible to stay",
+                                "No disciplinary actions"))
+CData %>% count(Q1.3)
+
+#recoding Q2.4
+##separating the data
+CDataQ2.4 <- multi.split(CData$Q2.4, split.char = ",", 
+                         mnames = NULL)
+
+##renaming variables
+names(CDataQ2.4) <- c('Q2.4_1', 'Q2.4_4', 'Q2.4_5', 'Q2.4_6', 'Q2.4_8', 'Q2.4_14')
+View(CDataQ2.4)
+
+##putting new variables back in dataset
+CDataQ2.4.R <- bind_cols(CData, CDataQ2.4)
+View(CDataQ2.4.R)
+
+###recoding Q2.4_1
+CDataQ2.4.R %>% count(Q2.4_1)
+CDataQ2.4.R$Q2.4_1 <- factor(CDataQ2.4.R$Q2.4_1,
+                             levels = c(0,1), 
+                             labels = c("No",
+                                        "Yes"))
+CDataQ2.4.R %>% count(Q2.4_1)
+
+###recoding Q2.4_4
+CDataQ2.4.R %>% count(Q2.4_4)
+CDataQ2.4.R$Q2.4_4 <- factor(CDataQ2.4.R$Q2.4_4,
+                             levels = c(0,1), 
+                             labels = c("No",
+                                        "Yes"))
+CDataQ2.4.R %>% count(Q2.4_4)
+
+###recoding Q2.4_6
+CDataQ2.4.R %>% count(Q2.4_6)
+CDataQ2.4.R$Q2.4_6 <- factor(CDataQ2.4.R$Q2.4_6,
+                             levels = c(0,1), 
+                             labels = c("No",
+                                        "Yes"))
+CDataQ2.4.R %>% count(Q2.4_6)
+
+###recoding Q2.4_5
+CDataQ2.4.R %>% count(Q2.4_5)
+CDataQ2.4.R$Q2.4_5 <- factor(CDataQ2.4.R$Q2.4_5,
+                             levels = c(0,1), 
+                             labels = c("No",
+                                        "Yes"))
+CDataQ2.4.R %>% count(Q2.4_5)
+
+###recoding Q2.4_8
+CDataQ2.4.R %>% count(Q2.4_8)
+CDataQ2.4.R$Q2.4_8 <- factor(CDataQ2.4.R$Q2.4_8,
+                             levels = c(0,1), 
+                             labels = c("No",
+                                        "Yes"))
+CDataQ2.4.R %>% count(Q2.4_8)
+
+###recoding Q2.4_14
+CDataQ2.4.R %>% count(Q2.4_14)
+CDataQ2.4.R$Q2.4_14 <- factor(CDataQ2.4.R$Q2.4_14,
+                              levels = c(0,1), 
+                              labels = c("No",
+                                         "Yes"))
+CDataQ2.4.R %>% count(Q2.4_14)
+
+#recoding Q2.16
+CDataQ2.4.R %>% count(Q2.16)
+
+##separating the data
+CDataQ2.16 <- multi.split(CDataQ2.4.R$Q2.16, split.char = ",", 
+                          mnames = NULL)
+View(CDataQ2.16)
+
+##renaming variables
+names(CDataQ2.16) <- c('Q2.16_1', 
+                       'Q2.16_2', 
+                       'Q2.16_3', 
+                       'Q2.16_4', 
+                       'Q2.16_5')
+View(CDataQ2.16)
+
+##putting new variables back in dataset
+CDataQ2.16.R <- bind_cols(CDataQ2.4.R, CDataQ2.16)
+View(CDataQ2.16.R)
+
+###recoding Q2.16_1
+CDataQ2.16.R %>% count(Q2.16_1)
+CDataQ2.16.R$Q2.16_1 <- factor(CDataQ2.16.R$Q2.16_1,
+                               levels = c(0,1), 
+                               labels = c("No",
+                                          "Yes"))
+CDataQ2.16.R %>% count(Q2.16_1)
+
+###recoding Q2.16_2
+CDataQ2.16.R %>% count(Q2.16_2)
+CDataQ2.16.R$Q2.16_2 <- factor(CDataQ2.16.R$Q2.16_2,
+                               levels = c(0,1), 
+                               labels = c("No",
+                                          "Yes"))
+CDataQ2.16.R %>% count(Q2.16_2)
+
+###recoding Q2.16_3
+CDataQ2.16.R %>% count(Q2.16_3)
+CDataQ2.16.R$Q2.16_3 <- factor(CDataQ2.16.R$Q2.16_3,
+                               levels = c(0,1), 
+                               labels = c("No",
+                                          "Yes"))
+CDataQ2.16.R %>% count(Q2.16_3)
+
+###recoding Q2.16_4
+CDataQ2.16.R %>% count(Q2.16_4)
+CDataQ2.16.R$Q2.16_4 <- factor(CDataQ2.16.R$Q2.16_4,
+                               levels = c(0,1), 
+                               labels = c("No",
+                                          "Yes"))
+CDataQ2.16.R %>% count(Q2.16_4)
+
+###recoding Q2.16_5
+CDataQ2.16.R %>% count(Q2.16_5)
+CDataQ2.16.R$Q2.16_5 <- factor(CDataQ2.16.R$Q2.16_5,
+                               levels = c(0,1), 
+                               labels = c("No",
+                                          "Yes"))
+CDataQ2.16.R %>% count(Q2.16_5)
+
+#recoding Q2.17
+CDataQ2.16.R %>% count(Q2.17)
+
+##separating the data
+CDataQ2.17 <- multi.split(CDataQ2.16.R$Q2.17, split.char = ",", 
+                          mnames = NULL)
+View(CDataQ2.17)
+
+##renaming variables
+names(CDataQ2.17) <- c('Q2.17_1', 
+                       'Q2.17_2', 
+                       'Q2.17_5', 
+                       'Q2.17_3', 
+                       'Q2.17_4',
+                       'Q2.17_6')
+View(CDataQ2.17)
+
+##putting new variables back in dataset
+CDataQ2.17.R <- bind_cols(CDataQ2.16.R, CDataQ2.17)
+View(CDataQ2.17.R)
+
+###recoding Q2.17_1
+CDataQ2.17.R %>% count(Q2.17_1)
+CDataQ2.17.R$Q2.17_1 <- factor(CDataQ2.17.R$Q2.17_1,
+                               levels = c(0,1), 
+                               labels = c("No",
+                                          "Yes"))
+CDataQ2.17.R %>% count(Q2.17_1)
+
+###recoding Q2.17_2
+CDataQ2.17.R %>% count(Q2.17_2)
+CDataQ2.17.R$Q2.17_2 <- factor(CDataQ2.17.R$Q2.17_2,
+                               levels = c(0,1), 
+                               labels = c("No",
+                                          "Yes"))
+CDataQ2.17.R %>% count(Q2.17_2)
+
+###recoding Q2.17_5
+CDataQ2.17.R %>% count(Q2.17_5)
+CDataQ2.17.R$Q2.17_5 <- factor(CDataQ2.17.R$Q2.17_5,
+                               levels = c(0,1), 
+                               labels = c("No",
+                                          "Yes"))
+CDataQ2.17.R %>% count(Q2.17_5)
+
+###recoding Q2.17_3
+CDataQ2.17.R %>% count(Q2.17_3)
+CDataQ2.17.R$Q2.17_3 <- factor(CDataQ2.17.R$Q2.17_3,
+                               levels = c(0,1), 
+                               labels = c("No",
+                                          "Yes"))
+CDataQ2.17.R %>% count(Q2.17_3)
+
+###recoding Q2.17_4
+CDataQ2.17.R %>% count(Q2.17_4)
+CDataQ2.17.R$Q2.17_4 <- factor(CDataQ2.17.R$Q2.17_4,
+                               levels = c(0,1), 
+                               labels = c("No",
+                                          "Yes"))
+CDataQ2.17.R %>% count(Q2.17_4)
+
+###recoding Q2.17_6
+CDataQ2.17.R %>% count(Q2.17_6)
+CDataQ2.17.R$Q2.17_6 <- factor(CDataQ2.17.R$Q2.17_6,
+                               levels = c(0,1), 
+                               labels = c("No",
+                                          "Yes"))
+CDataQ2.17.R %>% count(Q2.17_6)
+
+#recoding Q6.3
+CDataQ2.17.R %>% count(Q6.3)
+
+##separating the data
+CDataQ6.3 <- multi.split(CDataQ2.17.R$Q6.3, split.char = ",", 
+                         mnames = NULL)
+View(CDataQ6.3)
+
+##renaming variables
+names(CDataQ6.3) <- c('Q6.3_1', 
+                      'Q6.3_4', 
+                      'Q6.3_5', 
+                      'Q6.3_6', 
+                      'Q6.3_14',
+                      'Q6.3_8')
+View(CDataQ6.3)
+
+##putting new variables back in dataset
+CDataQ6.3.R <- bind_cols(CDataQ2.17.R, CDataQ6.3)
+View(CDataQ6.3.R)
+
+###recoding Q6.3_1
+CDataQ6.3.R %>% count(Q6.3_1)
+CDataQ6.3.R$Q6.3_1 <- factor(CDataQ6.3.R$Q6.3_1,
+                             levels = c(0,1), 
+                             labels = c("No",
+                                        "Yes"))
+CDataQ6.3.R %>% count(Q6.3_1)
+
+###recoding Q6.3_4
+CDataQ6.3.R %>% count(Q6.3_4)
+CDataQ6.3.R$Q6.3_4 <- factor(CDataQ6.3.R$Q6.3_4,
+                             levels = c(0,1), 
+                             labels = c("No",
+                                        "Yes"))
+CDataQ6.3.R %>% count(Q6.3_4)
+
+###recoding Q6.3_5
+CDataQ6.3.R %>% count(Q6.3_5)
+CDataQ6.3.R$Q6.3_5 <- factor(CDataQ6.3.R$Q6.3_5,
+                             levels = c(0,1), 
+                             labels = c("No",
+                                        "Yes"))
+CDataQ6.3.R %>% count(Q6.3_5)
+
+###recoding Q6.3_6
+CDataQ6.3.R %>% count(Q6.3_6)
+CDataQ6.3.R$Q6.3_6 <- factor(CDataQ6.3.R$Q6.3_6,
+                             levels = c(0,1), 
+                             labels = c("No",
+                                        "Yes"))
+CDataQ6.3.R %>% count(Q6.3_6)
+
+###recoding Q6.3_14
+CDataQ6.3.R %>% count(Q6.3_14)
+CDataQ6.3.R$Q6.3_14 <- factor(CDataQ6.3.R$Q6.3_14,
+                              levels = c(0,1), 
+                              labels = c("No",
+                                         "Yes"))
+CDataQ6.3.R %>% count(Q6.3_14)
+
+###recoding Q7.3
+##separating the data
+CDataQ7.3 <- multi.split(CDataQ6.3.R$Q7.3, split.char = ",", 
+                         mnames = NULL)
+
+##renaming variables
+names(CDataQ7.3) <- c('Q7.3_1', 
+                      'Q7.3_14', 
+                      'Q7.3_4', 
+                      'Q7.3_5', 
+                      'Q7.3_6',
+                      'Q7.3_8')
+
+##putting new variables back in dataset
+CDataQ7.3.R <- bind_cols(CDataQ6.3.R, CDataQ7.3)
+
+#recoding Q4.4
+CDataQ7.3.R %>% count(Q4.4)
+
+##separating the data
+CDataQ4.4 <- multi.split(CDataQ7.3.R$Q4.4, split.char = ",", 
+                         mnames = NULL)
+
+##renaming variables
+names(CDataQ4.4) <- c('Q4.4_1', 
+                      'Q4.4_4', 
+                      'Q4.4_5', 
+                      'Q4.4_6', 
+                      'Q4.4_8',
+                      'Q4.4_7')
+
+##putting new variables back in dataset
+CDataQ4.4.R <- bind_cols(CDataQ7.3.R, CDataQ4.4)
+
+#recoding Q5.4
+CDataQ4.4.R %>% count(Q5.4)
+
+##separating the data
+CDataQ5.4 <- multi.split(CDataQ4.4.R$Q5.4, split.char = ",", 
+                         mnames = NULL)
+
+##renaming variables
+names(CDataQ5.4) <- c('Q5.4_1', 
+                      'Q5.4_4', 
+                      'Q5.4_5', 
+                      'Q5.4_6',
+                      'Q5.4_14',
+                      'Q5.4_8')
+
+##putting new variables back in dataset
+CDataQ5.4.R <- bind_cols(CDataQ4.4.R, CDataQ5.4)
+
+#recoding Q5.12
+CDataQ5.4.R %>% count(Q5.12)
+
+##separating the data
+CDataQ5.12 <- multi.split(CDataQ5.4.R$Q5.12, split.char = ",", 
+                          mnames = NULL)
+
+##renaming variables
+names(CDataQ5.12) <- c('Q5.12_1', 
+                       'Q5.12_2', 
+                       'Q5.12_4', 
+                       'Q5.12_3',
+                       'Q5.12_5')
+
+##putting new variables back in dataset
+CDataQ5.12.R <- bind_cols(CDataQ5.4.R, CDataQ5.12)
+
+View(CDataQ5.12.R)
+
+###calculating demographics
+##Q4.3 child gender
+CDataQ5.12.R %>% count(Q4.3)
+
+##Q4.4 CH race (AA)
+CDataQ5.12.R %>% count(Q4.4_1)
+
+##Q4.4 CH race (Asian)
+CDataQ5.12.R %>% count(Q4.4_4)
+
+##Q4.4 CH race (White)
+CDataQ5.12.R %>% count(Q4.4_5)
+
+##Q4.4 CH race (Hispanic)
+CDataQ5.12.R %>% count(Q4.4_6)
+
+##Q4.4 CH race (Native American)
+CDataQ5.12.R %>% count(Q4.4_7)
+
+##Q4.4 CH race (Other)
+CDataQ5.12.R %>% count(Q4.4_8)
+
+##Q4.5 CH Disability
+CDataQ5.12.R %>% count(Q4.5)
+
+##Q4.16 Household Income
+CDataQ5.12.R %>% count(Q4.16)
