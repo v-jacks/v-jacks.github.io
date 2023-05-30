@@ -2,8 +2,8 @@ library(tidyverse)
 library(tidyr)
 library(questionr)
 
-
-setwd("C:/Users/Vii/Desktop/Projects/FOCCEE/Quant Analysis/JSZC Paper")
+#Setting working directory (removed for privacy)
+setwd("Path")
 CData<-read.csv("Centiment_Cleaned_Data_1.21.csv")
 
 View(CData)
