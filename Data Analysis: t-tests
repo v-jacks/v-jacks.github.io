@@ -1,0 +1,222 @@
+library(dplyr)
+library(car)
+library(emmeans)
+library(afex)
+library(ggplot2)
+library(pwr)
+library(rstatix)
+library(effsize)
+
+#setting working directory (path removed for privacy)
+setwd("~Path")
+FinalCData <- read.csv("Centiment_FINAL.csv")
+
+View(FinalCData)
+FinalCData %>% count(C1toC2)
+
+#Turning data into tibble for better readibility
+FinalCData <- as_tibble(FinalCData)
+print(FinalCData)
+
+#Omitting retained participants
+FinalCData %>% count(C1toC2)
+FinalCData2<-subset(FinalCData, C1toC2!="4")
+FinalCData2 %>% count(C1toC2)
+
+#Correlations between quality questions
+#Center 1
+cor(FinalCData2$Q2.10_1, FinalCData2$Q2.10_2, use="complete.obs")
+cor(FinalCData2$Q2.10_2, FinalCData2$Q2.10_3, use="complete.obs")
+cor(FinalCData2$Q2.10_1, FinalCData2$Q2.10_3, use="complete.obs")
+
+#Center 2
+cor(FinalCData2$Q6.10_1, FinalCData2$Q6.10_2, use="complete.obs")
+cor(FinalCData2$Q6.10_2, FinalCData2$Q6.10_3, use="complete.obs")
+cor(FinalCData2$Q6.10_1, FinalCData2$Q6.10_3, use="complete.obs")
+
+##Average C1 Quality
+#Cutting the C1 data
+QualC1<-select(FinalCData2, Q2.10_1, Q2.10_2, Q2.10_3)
+View(QualC1)
+
+#Finding C1 quality row means and adding back to full dataset
+FinalCData2$MQualC1 <- rowMeans(QualC1, na.rm = TRUE)
+View(FinalCData2)
+FinalCData2 %>% count(MQualC1)
+
+##Average C2 Quality
+#Cutting the C2 data
+QualC2<-select(FinalCData2,Q6.10_1, Q6.10_2, Q6.10_3)
+View(QualC2)
+
+#Finding C1 quality row means and adding back to full dataset
+FinalCData2$MQualC2 <- rowMeans(QualC2)
+View(FinalCData2)
+
+##Descriptives
+#Quality C1
+FinalCData2 %>% count(MQualC1)
+mean(FinalCData2$MQualC1, na.rm = TRUE)
+sd(FinalCData2$MQualC1, na.rm = TRUE)
+range(FinalCData2$MQualC1, na.rm = TRUE)
+hist(FinalCData2$MQualC1)
+
+#Quality C2
+FinalCData2 %>% count(MQualC2)
+mean(FinalCData2$MQualC2, na.rm = TRUE)
+sd(FinalCData2$MQualC2, na.rm = TRUE)
+range(FinalCData2$MQualC2, na.rm = TRUE)
+hist(FinalCData2$MQualC2)
+
+#Accessibility C1
+FinalCData2 %>% count(Q2.5)
+mean(FinalCData2$Q2.5, na.rm = TRUE)
+sd(FinalCData2$Q2.5, na.rm = TRUE)
+range(FinalCData2$Q2.5, na.rm = TRUE)
+hist(FinalCData2$Q2.5)
+
+#Accessibility C2
+FinalCData2 %>% count(Q6.5)
+mean(FinalCData2$Q6.5, na.rm = TRUE)
+sd(FinalCData2$Q6.5, na.rm = TRUE)
+range(FinalCData2$Q6.5, na.rm = TRUE)
+hist(FinalCData2$Q6.5)
+
+##Demographics
+##Q4.3 child gender
+FinalCData2 %>% count(Q4.3)
+
+##Q4.4 CH race (AA)
+FinalCData2 %>% count(Q4.4_1)
+
+##Q4.4 CH race (Asian)
+FinalCData2 %>% count(Q4.4_4)
+
+##Q4.4 CH race (White)
+FinalCData2 %>% count(Q4.4_5)
+
+##Q4.4 CH race (Hispanic)
+FinalCData2 %>% count(Q4.4_6)
+
+##Q4.4 CH race (Native American)
+FinalCData2 %>% count(Q4.4_7)
+
+##Q4.4 CH race (Other)
+FinalCData2 %>% count(Q4.4_8)
+
+##Q4.5 CH Disability
+FinalCData2 %>% count(Q4.5)
+#Making Disability status a binary variable
+FinalCData2 %>% count(Q4.5)
+FinalCData2$Q4.5 <- factor(FinalCData2$Q4.5,
+                            levels = c(1,2,3), 
+                            labels = c("Yes/Suspected",
+                                       "Yes/Suspected",
+                                       "No"))
+FinalCData2 %>% count(Q4.5)
+
+##Q4.8 Caregiver relationship to child
+FinalCData2 %>% count(Q4.7)
+
+##Q4.8 Caregiver Race
+FinalCData2 %>% count(Q4.8)
+
+##Q4.16 Household Income
+FinalCData2 %>% count(Q4.16)
+
+##Q4.9 Marital Status
+FinalCData2 %>% count(Q4.9)
+
+##Q4.10 Caregiver Education
+FinalCData2 %>% count(Q4.10)
+
+##Q4.11 Language spoken at home
+FinalCData2 %>% count(Q4.11)
+
+##Q4.13 Location
+FinalCData2 %>% count(Q4.9)
+
+##Q4.12 Public Assistance
+FinalCData2 %>% count(Q4.12)
+#Filling empty cells with 0
+FinalCData2$Q4.12[FinalCData2$Q4.12 == ""] <- 0
+FinalCData2 %>% count(Q4.12)
+#Making PubAssist binary variable
+FinalCData2 %>% count(Q4.12)
+FinalCData2$Q4.12 <- factor(FinalCData2$Q4.12,
+                             levels = c(0,1,4,5,6,8,9,10), 
+                             labels = c("No",
+                                        "Yes",
+                                        "Yes",
+                                        "Yes",
+                                        "Yes",
+                                        "Yes",
+                                        "Yes",
+                                        "Yes"))
+FinalCData2 %>% count(Q4.12)
+View(FinalCData2)
+
+####Analysis
+###t-test Assumptions
+##HOV
+#Power for t-tests
+#Calculating Cohen's d for power analysis
+cohen.d(FinalCData2$MQualC1, FinalCData2$MQualC2, na.rm = TRUE)
+
+T.TestPower <- pwr.t.test(n = 114, d = -0.23, sig.level = 0.05, power = NULL, type = c("paired"), 
+           alternative = "two.sided")
+T.TestPower
+
+###t-tests for combined data (withdrawn and expelled)
+##Quality
+t.test(x= FinalCData2$MQualC1, y= FinalCData2$MQualC2, alternative = c("two.sided"),
+       paired = TRUE, var.equal = TRUE, conf.level = 0.95, na.rm = TRUE)
+
+##Accessibility
+t.test(x= FinalCData2$Q2.5, y= FinalCData2$Q6.5, alternative = c("two.sided"),
+       paired = TRUE, var.equal = TRUE, conf.level = 0.95, na.rm = TRUE)
+
+#RM One Way ANOVA controlling for Disability  Status
+#Quality
+DisabilityModel.1 <- FinalCData2 %>% anova_test(MQualC2 ~ MQualC1 + Q4.5,)
+DisabilityModel.1
+
+#Accessibility
+DisabilityModel.2 <- FinalCData2 %>% anova_test(Q6.5 ~ Q2.5 + Q4.5,)
+DisabilityModel.2
+
+#Controlling for Public Assistance ANOVA
+#Quality
+PubAssistModel.1 <- FinalCData2 %>% anova_test(MQualC2 ~ MQualC1 + Q4.12)
+PubAssistModel.1
+
+#Accessibility
+PubAssistModel.2 <- FinalCData2 %>% anova_test(Q6.5 ~ Q2.5 + Q4.12)
+PubAssistModel.2
+beep(8)
+
+###RM One Way ANOVA Disability Status Interaction
+#Quality
+DisabilityModel.3 <- FinalCData2 %>% anova_test(MQualC2 ~ MQualC1 * Q4.5,)
+DisabilityModel.3
+
+#Accessibility
+DisabilityModel.4 <- FinalCData2 %>% anova_test(Q6.5 ~ Q2.5 * Q4.5,)
+DisabilityModel.4
+
+#Interation for Public Assistance ANOVA
+#Quality
+PubAssistModel.3 <- FinalCData2 %>% anova_test(MQualC2 ~ MQualC1 * Q4.12)
+PubAssistModel.3
+
+#Accessibility
+PubAssistModel.4 <- FinalCData2 %>% anova_test(Q6.5 ~ Q2.5 * Q4.12)
+PubAssistModel.4
+beep(8)
+
+#Correlation Between disability status and public assistance
+typeof(FinalCData2$Q4.5)
+typeof(FinalCData2$Q4.12)
+FinalCData2$Q4.5N <-as.numeric(FinalCData2$Q4.5)
+FinalCData2$Q4.12N <-as.numeric(FinalCData2$Q4.12)
+cor(FinalCData2$Q4.12N, FinalCData2$Q4.5N, use="complete.obs")
