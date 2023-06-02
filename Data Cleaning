@@ -1,6 +1,7 @@
 library(tidyverse)
 library(tidyr)
 library(questionr)
+library(readr)
 
 #Setting working directory (removed for privacy)
 setwd("Path")
@@ -346,30 +347,5 @@ CDataQ5.12.R <- bind_cols(CDataQ5.4.R, CDataQ5.12)
 
 View(CDataQ5.12.R)
 
-###calculating demographics
-##Q4.3 child gender
-CDataQ5.12.R %>% count(Q4.3)
-
-##Q4.4 CH race (AA)
-CDataQ5.12.R %>% count(Q4.4_1)
-
-##Q4.4 CH race (Asian)
-CDataQ5.12.R %>% count(Q4.4_4)
-
-##Q4.4 CH race (White)
-CDataQ5.12.R %>% count(Q4.4_5)
-
-##Q4.4 CH race (Hispanic)
-CDataQ5.12.R %>% count(Q4.4_6)
-
-##Q4.4 CH race (Native American)
-CDataQ5.12.R %>% count(Q4.4_7)
-
-##Q4.4 CH race (Other)
-CDataQ5.12.R %>% count(Q4.4_8)
-
-##Q4.5 CH Disability
-CDataQ5.12.R %>% count(Q4.5)
-
-##Q4.16 Household Income
-CDataQ5.12.R %>% count(Q4.16)
+##exporting current dataset as csv (path removed for privacy)
+write_csv(CDataQ5.12.R, "Path/CData_Cleaned.csv")
